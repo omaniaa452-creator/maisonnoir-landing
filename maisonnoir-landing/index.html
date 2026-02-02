@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html class="dark scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ARCHITECT | Luxury Portfolio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#D4AF37","primary-dark": "#B59020",
+                        "background-light": "#f8f9fa",
+                        "background-dark": "#0a0a0a","surface-dark": "#121212",
+                        "neutral-dark": "#1a1a1a",
+                        "neutral-gold": "#D4AF37",
+                        "charcoal": "#1c1c1c"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif-main": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'pulse-glow': 'pulseGlow 3s infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 0px rgba(212, 175, 55, 0)' },
+                            '50%': { boxShadow: '0 0 20px rgba(212, 175, 55, 0.3)' }
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .glassmorphism {
+                @apply bg-white/80 dark:bg-black/60 backdrop-blur-xl border-b border-white/10 dark:border-white/5;
+            }
+            .reveal-text {
+                opacity: 0;
+                transform: translateY(30px);
+                transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+            .reveal-text.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .parallax-container {
+                overflow: hidden;
+            }
+            .parallax-bg {
+                height: 120%;
+                top: -10%;
+                transition: transform 0.1s linear;
+                will-change: transform;
+                filter: contrast(1.1) brightness(0.9);
+            }
+            .before-after-slider {
+                position: relative;
+                width: 100%;
+                aspect-ratio: 16/9;
+                overflow: hidden;
+                border-radius: 1.5rem;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                touch-action: none;
+                user-select: none;
+            }
+            .slider-handle {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: #D4AF37;
+                cursor: ew-resize;
+                z-index: 30;
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            }
+            .slider-handle::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 48px;
+                height: 48px;
+                background: #1a1a1a;
+                border: 2px solid #D4AF37;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m18 8 4 4-4 4M6 8l-4 4 4 4'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+            .after-image {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-size: cover;
+                background-position: center;
+                filter: contrast(1.15) brightness(1.05);
+            }
+            .before-image {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-size: cover;
+                background-position: center;
+                z-index: 20;
+                filter: grayscale(100%) contrast(1.2) brightness(0.9);
+            }
+            .slider-label {
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+            .project-tab.active {
+                @apply bg-primary text-black border-primary;
+            }
+            .blueprint-grid {
+                background-color: #f8f9fa;
+                background-image: 
+                    linear-gradient(rgba(212, 175, 55, 0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(212, 175, 55, 0.1) 1px, transparent 1px);
+                background-size: 40px 40px;
+            }
+            .dark .blueprint-grid {
+                background-color: #0d0d0d;
+                background-image: 
+                    linear-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(212, 175, 55, 0.08) 1px, transparent 1px);
+            }
+            .journey-line {
+                background: linear-gradient(90deg, transparent 0%, #D4AF37 20%, #D4AF37 80%, transparent 100%);
+                box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            }
+            .grain-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 0;
+                opacity: 0.05;
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+            }
+            .gold-glow:hover {
+                box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+                border-color: #D4AF37;
+            }
+            .icon-glow {
+                box-shadow: 0 0 0 rgba(212, 175, 55, 0);
+                transition: box-shadow 0.4s ease, transform 0.4s ease;
+            }
+            .group:hover .icon-glow {
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            }
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .text-serif-alt {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-neutral-dark dark:text-slate-200 transition-colors duration-500 selection:bg-primary selection:text-black">
+<div class="grain-overlay dark:opacity-[0.07]"></div>
+<header class="fixed top-0 left-0 right-0 z-[60] glassmorphism transition-colors duration-300">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-24">
+<div class="flex items-center gap-4">
+<div class="size-8 text-primary">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-neutral-dark dark:text-white text-xl font-serif-alt font-bold tracking-[0.2em] uppercase">Maison<span class="text-primary">Noir</span></h2>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors dark:text-gray-300" href="#projects">Portfolio</a>
+<a class="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors dark:text-gray-300" href="#transformation">Showcase</a>
+<a class="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors dark:text-gray-300" href="#journey">Process</a>
+<a class="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors dark:text-gray-300" href="#services">Services</a>
+<div class="h-6 w-px bg-gray-300 dark:bg-white/20 mx-2"></div>
+<button aria-label="Toggle Dark Mode" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors group relative" id="theme-toggle">
+<span class="material-symbols-outlined dark:hidden text-neutral-dark">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:block text-primary animate-pulse-glow rounded-full">light_mode</span>
+</button>
+<button class="flex min-w-[140px] items-center justify-center rounded-none border border-neutral-dark dark:border-primary h-12 px-6 bg-transparent dark:text-primary text-neutral-dark text-xs font-bold tracking-widest uppercase hover:bg-neutral-dark hover:text-white dark:hover:bg-primary dark:hover:text-black transition-all duration-300">
+                Inquire
+            </button>
+</nav>
+<div class="flex items-center gap-4 md:hidden">
+<button class="p-2 text-neutral-dark dark:text-white" id="mobile-theme-toggle">
+<span class="material-symbols-outlined dark:hidden">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:block">light_mode</span>
+</button>
+<button class="text-neutral-dark dark:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</header>
+<main class="relative z-10">
+<section class="relative h-screen flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center scale-105" data-alt="Modern concrete house" style='background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAQW7Cq5j_okVTnXwiSTH7Sh7E3D3omCpeoks6-b0zi1ri5oZdQ2xui3iSbV5MYpzfXMst1bgVWQPRIAh54bavP9OhmbTp_8RQqj9i33_t2Cfpk8qoj8r3n4I7-WvAbwwQRyi5As30fD8g6bFdWMTBKYBVyATTwSBjAc__LXh9hMEk4i3G8ndK8fFDAq1YdJO5QHUYfl4J-iojrx2Kzvm8BHzVmhzYlQscV_guYO5pBTF08Ss8a01Wt-kYwxQhxp-bhFefGQwjZhV4");'></div>
+<div class="absolute inset-0 bg-black/40"></div>
+</div>
+<div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full pt-20">
+<div class="max-w-4xl animate-fade-in-up">
+<div class="flex items-center gap-4 mb-8">
+<div class="h-px w-12 bg-primary"></div>
+<p class="text-primary font-bold tracking-[0.4em] uppercase text-xs">High-End Residential Architecture</p>
+</div>
+<h1 class="text-white text-6xl md:text-8xl font-serif-alt font-medium leading-[1.1] mb-10 tracking-tight">
+                    Silence sculpted <br/>into <span class="text-primary italic">form.</span>
+</h1>
+<p class="text-gray-300 text-lg md:text-xl font-light leading-relaxed mb-16 max-w-xl border-l border-primary/50 pl-6">
+                    We create bespoke environments that balance luxury with restraint, delivering timeless aesthetics for the modern connoisseur.
+                </p>
+<div class="flex flex-wrap gap-6">
+<button class="group flex items-center gap-3 min-w-[200px] justify-center rounded-none border border-primary h-16 px-10 bg-primary/90 text-black text-xs uppercase tracking-widest font-bold transition-all hover:bg-white hover:border-white">
+                        View Projects
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform text-sm">arrow_forward</span>
+</button>
+<button class="flex min-w-[200px] items-center justify-center rounded-none h-16 px-10 bg-white/5 backdrop-blur-md border border-white/20 text-white text-xs uppercase tracking-widest font-bold hover:bg-white/10 hover:border-primary/50 hover:text-primary transition-all">
+                        Studio Profile
+                    </button>
+</div>
+</div>
+</div>
+<div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-float text-primary/70">
+<span class="material-symbols-outlined text-4xl font-light">keyboard_arrow_down</span>
+</div>
+</section>
+<section class="py-32 blueprint-grid overflow-hidden border-y border-neutral-gold/10" id="journey">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="text-center mb-24 reveal-text">
+<h2 class="text-primary text-xs font-bold tracking-[0.3em] uppercase mb-6">Our Methodology</h2>
+<h3 class="text-4xl md:text-5xl font-serif-alt text-neutral-dark dark:text-white">The Design Journey</h3>
+</div>
+<div class="relative py-10">
+<div class="absolute top-1/2 left-0 w-full h-[1px] journey-line opacity-50 -translate-y-1/2 hidden md:block"></div>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-12 relative z-10">
+<div class="group flex flex-col items-center text-center transition-all duration-700 reveal-text">
+<div class="w-24 h-24 rounded-full bg-white dark:bg-surface-dark shadow-2xl border border-neutral-gold/20 flex items-center justify-center mb-10 icon-glow transition-all duration-500 cursor-help relative z-20">
+<span class="material-symbols-outlined text-3xl text-neutral-dark dark:text-gray-400 group-hover:text-primary transition-colors">forum</span>
+</div>
+<div class="flex flex-col justify-center min-h-[100px]">
+<h4 class="text-lg font-serif-alt mb-3 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Consultation</h4>
+<p class="text-xs text-slate-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 leading-relaxed max-w-[200px] mx-auto uppercase tracking-wide">Vision Alignment</p>
+</div>
+</div>
+<div class="group flex flex-col items-center text-center transition-all duration-700 reveal-text" style="transition-delay: 100ms;">
+<div class="w-24 h-24 rounded-full bg-white dark:bg-surface-dark shadow-2xl border border-neutral-gold/20 flex items-center justify-center mb-10 icon-glow transition-all duration-500 cursor-help relative z-20">
+<span class="material-symbols-outlined text-3xl text-neutral-dark dark:text-gray-400 group-hover:text-primary transition-colors">architecture</span>
+</div>
+<div class="flex flex-col justify-center min-h-[100px]">
+<h4 class="text-lg font-serif-alt mb-3 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Concept</h4>
+<p class="text-xs text-slate-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 leading-relaxed max-w-[200px] mx-auto uppercase tracking-wide">Spatial Layouts</p>
+</div>
+</div>
+<div class="group flex flex-col items-center text-center transition-all duration-700 reveal-text" style="transition-delay: 200ms;">
+<div class="w-24 h-24 rounded-full bg-white dark:bg-surface-dark shadow-2xl border border-neutral-gold/20 flex items-center justify-center mb-10 icon-glow transition-all duration-500 cursor-help relative z-20">
+<span class="material-symbols-outlined text-3xl text-neutral-dark dark:text-gray-400 group-hover:text-primary transition-colors">view_in_ar</span>
+</div>
+<div class="flex flex-col justify-center min-h-[100px]">
+<h4 class="text-lg font-serif-alt mb-3 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Visualization</h4>
+<p class="text-xs text-slate-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 leading-relaxed max_w-[200px] mx-auto uppercase tracking-wide">Photorealistic 3D</p>
+</div>
+</div>
+<div class="group flex flex-col items-center text-center transition-all duration-700 reveal-text" style="transition-delay: 300ms;">
+<div class="w-24 h-24 rounded-full bg-white dark:bg-surface-dark shadow-2xl border border-neutral-gold/20 flex items-center justify-center mb-10 icon-glow transition-all duration-500 cursor-help relative z-20">
+<span class="material-symbols-outlined text-3xl text-neutral-dark dark:text-gray-400 group-hover:text-primary transition-colors">edit_document</span>
+</div>
+<div class="flex flex-col justify-center min-h-[100px]">
+<h4 class="text-lg font-serif-alt mb-3 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Technical</h4>
+<p class="text-xs text-slate-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 leading-relaxed max-w-[200px] mx-auto uppercase tracking-wide">Construction Docs</p>
+</div>
+</div>
+<div class="group flex flex-col items-center text-center transition-all duration-700 reveal-text" style="transition-delay: 400ms;">
+<div class="w-24 h-24 rounded-full bg-white dark:bg-surface-dark shadow-2xl border border-neutral-gold/20 flex items-center justify-center mb-10 icon-glow transition-all duration-500 cursor-help relative z-20">
+<span class="material-symbols-outlined text-3xl text-neutral-dark dark:text-gray-400 group-hover:text-primary transition-colors">business_center</span>
+</div>
+<div class="flex flex-col justify-center min-h-[100px]">
+<h4 class="text-lg font-serif-alt mb-3 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Execution</h4>
+<p class="text-xs text-slate-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 leading-relaxed max-w-[200px] mx-auto uppercase tracking-wide">On-site Management</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 bg-slate-50 dark:bg-surface-dark overflow-hidden" id="transformation">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="flex flex-col items-center text-center mb-20 reveal-text">
+<h2 class="text-primary text-xs font-bold tracking-[0.3em] uppercase mb-6">Before &amp; After</h2>
+<h3 class="text-4xl md:text-5xl font-serif-alt font-medium tracking-tight mb-8 text-neutral-dark dark:text-white">Transformation Gallery</h3>
+<p class="text-slate-600 dark:text-gray-400 max-w-2xl text-lg font-light leading-relaxed">
+                    Witness the alchemy of architecture. Select a project to reveal the journey from existing conditions to realized masterwork.
+                </p>
+</div>
+<div class="flex flex-wrap justify-center gap-6 mb-16 reveal-text">
+<button class="project-tab active px-8 py-4 text-xs font-bold tracking-[0.2em] uppercase border-b-2 border-primary bg-transparent text-neutral-dark dark:text-white transition-all hover:text-primary" data-index="0">
+                    Kyoto Villa
+                </button>
+<button class="project-tab px-8 py-4 text-xs font-bold tracking-[0.2em] uppercase border-b-2 border-transparent bg-transparent text-gray-500 hover:text-neutral-dark dark:text-gray-500 dark:hover:text-white transition-all" data-index="1">
+                    SF Modern HQ
+                </button>
+<button class="project-tab px-8 py-4 text-xs font-bold tracking-[0.2em] uppercase border-b-2 border-transparent bg-transparent text-gray-500 hover:text-neutral-dark dark:text-gray-500 dark:hover:text-white transition-all" data-index="2">
+                    Berlin Loft
+                </button>
+</div>
+<div class="relative min-h-[600px] reveal-text">
+<div class="project-slide w-full animate-fade-in">
+<div class="before-after-slider group rounded-none border border-white/10 shadow-2xl shadow-black/50">
+<div class="after-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8RnjhlGUS7u6uHXgxQywRxm1itVBoyn72kHN2GG-1lcykeBbtB6P8ASnr6-dRlsr7rCkV3Hs0hjZrSPardkvFFlIverGCQF0_1Ws_vb9jpuUlRPHYaCihC708C-Pl91yBO3GI78DetsfsYwkZjC99eFfx-NR8hwBTeles0BVgymGu7PhVA2APc22IlwnV2gTlFf0MMB5P5qOFtolw2Bq6JCrZb888aiprLcvMz5_cDExFRm8pdcI7sXd_it3pKYPPiU2i77n6cao');"></div>
+<div class="before-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAQW7Cq5j_okVTnXwiSTH7Sh7E3D3omCpeoks6-b0zi1ri5oZdQ2xui3iSbV5MYpzfXMst1bgVWQPRIAh54bavP9OhmbTp_8RQqj9i33_t2Cfpk8qoj8r3n4I7-WvAbwwQRyi5As30fD8g6bFdWMTBKYBVyATTwSBjAc__LXh9hMEk4i3G8ndK8fFDAq1YdJO5QHUYfl4J-iojrx2Kzvm8BHzVmhzYlQscV_guYO5pBTF08Ss8a01Wt-kYwxQhxp-bhFefGQwjZhV4'); clip-path: inset(0 50% 0 0);"></div>
+<div class="absolute inset-0 pointer-events-none z-40 flex items-center justify-between px-10">
+<span class="slider-label left-label bg-black/80 backdrop-blur-sm text-primary text-[10px] font-bold tracking-[0.2em] uppercase px-4 py-2 border border-primary/30">Original</span>
+<span class="slider-label right-label bg-black/80 backdrop-blur-sm text-primary text-[10px] font-bold tracking-[0.2em] uppercase px-4 py-2 border border-primary/30">Realized</span>
+</div>
+<div class="slider-handle" style="left: 50%;"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 p-10 bg-white dark:bg-charcoal border-l-4 border-primary shadow-xl">
+<div class="flex flex-col gap-3">
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Location</span>
+<span class="text-2xl font-serif-alt text-neutral-dark dark:text-white">Kyoto, Japan</span>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Year</span>
+<span class="text-2xl font-serif-alt text-neutral-dark dark:text-white">2023</span>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Typology</span>
+<span class="text-2xl font-serif-alt text-neutral-dark dark:text-white">Japandi Minimalist</span>
+</div>
+</div>
+</div>
+<!-- NOTE: Remaining HTML content continues in your original message.
+     This repository bundle includes the index.html exactly as received up to the point provided in the last message.
+     If you want the full file included end-to-end, paste the remaining tail section and I will regenerate the zip with the complete HTML. -->
+<script>
+    // Theme Toggle Logic
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const mobileThemeToggleBtn = document.getElementById('mobile-theme-toggle');
+    const html = document.documentElement;
+    function toggleTheme() {
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+    if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+    if (mobileThemeToggleBtn) mobileThemeToggleBtn.addEventListener('click', toggleTheme);
+    // Tab Switching Logic
+    const tabs = document.querySelectorAll('.project-tab');
+    const slides = document.querySelectorAll('.project-slide');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                // Tab styling reset
+                t.classList.add('border-transparent', 'text-gray-500');
+                t.classList.remove('border-primary', 'text-neutral-dark', 'dark:text-white');
+            });
+            slides.forEach(s => s.classList.add('hidden'));
+            tab.classList.add('active');
+            // Active styling
+            tab.classList.remove('border-transparent', 'text-gray-500');
+            tab.classList.add('border-primary', 'text-neutral-dark', 'dark:text-white');
+            const index = tab.getAttribute('data-index');
+            slides[index].classList.remove('hidden');
+        });
+    });
+    // Multi-instance Slider Logic
+    let activeSliderElement = null;
+    function updateSlider(e, pageX) {
+        if (!activeSliderElement) return;
+        const rect = activeSliderElement.getBoundingClientRect();
+        const handle = activeSliderElement.querySelector('.slider-handle');
+        const beforeImg = activeSliderElement.querySelector('.before-image');
+        const leftLabel = activeSliderElement.querySelector('.left-label');
+        const rightLabel = activeSliderElement.querySelector('.right-label');
+        let pos = ((pageX - rect.left) / rect.width) * 100;
+        if (pos < 0) pos = 0;
+        if (pos > 100) pos = 100;
+        handle.style.left = `${pos}%`;
+        beforeImg.style.clipPath = `inset(0 ${100 - pos}% 0 0)`;
+        // Label fade logic
+        if (pos < 15) {
+            leftLabel.style.opacity = '0';
+        } else if (pos > 85) {
+            rightLabel.style.opacity = '0';
+        } else {
+            leftLabel.style.opacity = '1';
+            rightLabel.style.opacity = '1';
+        }
+    }
+    document.querySelectorAll('.before-after-slider').forEach(slider => {
+        slider.addEventListener('mousedown', (e) => {
+            activeSliderElement = slider;
+            updateSlider(e, e.pageX);
+        });
+        slider.addEventListener('touchstart', (e) => {
+            activeSliderElement = slider;
+            updateSlider(e, e.touches[0].pageX);
+        });
+    });
+    window.addEventListener('mouseup', () => activeSliderElement = null);
+    window.addEventListener('touchend', () => activeSliderElement = null);
+    window.addEventListener('mousemove', (e) => {
+        if (activeSliderElement) {
+            e.preventDefault();
+            updateSlider(e, e.pageX);
+        }
+    });
+    window.addEventListener('touchmove', (e) => {
+        if (activeSliderElement) {
+            updateSlider(e, e.touches[0].pageX);
+        }
+    });
+    // Existing Parallax & Reveal Effects
+    window.addEventListener('scroll', () => {
+        const scroll = window.pageYOffset;
+        const parallaxBgs = document.querySelectorAll('.parallax-bg');
+        parallaxBgs.forEach(bg => {
+            const parent = bg.closest('.parallax-container');
+            const rect = parent.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                const shift = (window.innerHeight - rect.top) * 0.05;
+                bg.style.transform = `translateY(${shift}px) scale(1.1)`;
+            }
+        });
+        const reveals = document.querySelectorAll('.reveal-text');
+        reveals.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.9) {
+                el.classList.add('active');
+            }
+        });
+    });
+    window.dispatchEvent(new Event('scroll'));
+</script>
+
+</body></html>
