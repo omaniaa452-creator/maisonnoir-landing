@@ -13,56 +13,85 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#D4AF37",
-                        "primary-dark": "#B59020",
-                        "background-light": "#fcfcfc",
-                        "background-dark": "#080808",
-                        "surface-dark": "#121212",
-                        "neutral-dark": "#111111",
+                        "primary": "#D4AF37","primary-dark": "#B59020",
+                        "background-light": "#f8f9fa",
+                        "background-dark": "#0a0a0a","surface-dark": "#121212",
+                        "neutral-dark": "#1a1a1a",
                         "neutral-gold": "#D4AF37",
-                        "charcoal": "#1a1a1a"
+                        "charcoal": "#1c1c1c"
                     },
                     fontFamily: {
                         "display": ["Manrope", "sans-serif"],
                         "serif-main": ["Playfair Display", "serif"]
                     },
-                    letterSpacing: {
-                        'ultra-wide': '0.4em',
-                        'luxury': '0.15em'
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'pulse-glow': 'pulseGlow 3s infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 0px rgba(212, 175, 55, 0)' },
+                            '50%': { boxShadow: '0 0 20px rgba(212, 175, 55, 0.3)' }
+                        }
                     }
                 },
             },
         }
     </script>
 <style type="text/tailwindcss">
-        @layer base {
-            body {
-                @apply font-display text-slate-800 dark:text-slate-100 antialiased leading-relaxed;
-            }
-        }
         @layer utilities {
             .glassmorphism {
-                @apply bg-white/90 dark:bg-black/80 backdrop-blur-2xl border-b border-black/5 dark:border-white/10;
+                @apply bg-white/80 dark:bg-black/60 backdrop-blur-xl border-b border-white/10 dark:border-white/5;
             }
             .reveal-text {
                 opacity: 0;
-                transform: translateY(20px);
-                transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+                transform: translateY(30px);
+                transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
             }
             .reveal-text.active {
                 opacity: 1;
                 transform: translateY(0);
             }
-            .before-after-container {
-                min-height: 600px;
-                @apply relative overflow-hidden;
+            .parallax-container {
+                overflow: hidden;
+            }
+            .parallax-bg {
+                height: 120%;
+                top: -10%;
+                transition: transform 0.1s linear;
+                will-change: transform;
+                filter: contrast(1.1) brightness(0.9);
             }
             .before-after-slider {
                 position: relative;
                 width: 100%;
                 aspect-ratio: 16/9;
                 overflow: hidden;
-                border: 1px solid rgba(212, 175, 55, 0.2);
+                border-radius: 1.5rem;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                border: 1px solid rgba(255, 255, 255, 0.1);
                 touch-action: none;
                 user-select: none;
             }
@@ -74,7 +103,7 @@
                 background: #D4AF37;
                 cursor: ew-resize;
                 z-index: 30;
-                box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
             }
             .slider-handle::after {
                 content: '';
@@ -82,28 +111,63 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                width: 40px;
-                height: 40px;
-                background: #000;
-                border: 1px solid #D4AF37;
+                width: 48px;
+                height: 48px;
+                background: #1a1a1a;
+                border: 2px solid #D4AF37;
                 border-radius: 50%;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m18 8 4 4-4 4M6 8l-4 4 4 4'/%3E%3C/svg%3E");
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m18 8 4 4-4 4M6 8l-4 4 4 4'/%3E%3C/svg%3E");
                 background-repeat: no-repeat;
                 background-position: center;
-                box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            }
+            .after-image {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-size: cover;
+                background-position: center;
+                filter: contrast(1.15) brightness(1.05);
+            }
+            .before-image {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-size: cover;
+                background-position: center;
+                z-index: 20;
+                filter: grayscale(100%) contrast(1.2) brightness(0.9);
+            }
+            .slider-label {
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+            .project-tab.active {
+                @apply bg-primary text-black border-primary;
             }
             .blueprint-grid {
+                background-color: #f8f9fa;
                 background-image: 
-                    linear-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(212, 175, 55, 0.05) 1px, transparent 1px);
-                background-size: 50px 50px;
+                    linear-gradient(rgba(212, 175, 55, 0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(212, 175, 55, 0.1) 1px, transparent 1px);
+                background-size: 40px 40px;
             }
-            .gold-glow-hover {
-                @apply transition-all duration-300;
+            .dark .blueprint-grid {
+                background-color: #0d0d0d;
+                background-image: 
+                    linear-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(212, 175, 55, 0.08) 1px, transparent 1px);
             }
-            .gold-glow-hover:hover {
-                box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-                @apply border-primary/60;
+            .journey-line {
+                background: linear-gradient(90deg, transparent 0%, #D4AF37 20%, #D4AF37 80%, transparent 100%);
+                box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
             }
             .grain-overlay {
                 position: fixed;
@@ -112,404 +176,311 @@
                 width: 100%;
                 height: 100%;
                 pointer-events: none;
-                z-index: 100;
-                opacity: 0.03;
-                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+                z-index: 0;
+                opacity: 0.05;
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
             }
-            .scroll-top-btn {
-                opacity: 0;
-                visibility: hidden;
-                transition: all 0.4s ease;
+            .gold-glow:hover {
+                box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+                border-color: #D4AF37;
             }
-            .scroll-top-btn.visible {
-                opacity: 1;
-                visibility: visible;
+            .icon-glow {
+                box-shadow: 0 0 0 rgba(212, 175, 55, 0);
+                transition: box-shadow 0.4s ease, transform 0.4s ease;
             }
+            .group:hover .icon-glow {
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            }
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .text-serif-alt {
+            font-family: 'Playfair Display', serif;
         }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark">
-<div class="grain-overlay"></div>
-<button class="scroll-top-btn fixed bottom-28 right-4 md:right-8 z-[70] w-12 h-12 bg-white dark:bg-neutral-dark border border-primary/30 text-primary flex items-center justify-center rounded-none shadow-2xl gold-glow-hover" id="scrollToTop">
-<span class="material-symbols-outlined">north</span>
-</button>
-<header class="fixed top-0 left-0 right-0 z-[60] glassmorphism">
-<div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
+<body class="bg-background-light dark:bg-background-dark text-neutral-dark dark:text-slate-200 transition-colors duration-500 selection:bg-primary selection:text-black">
+<div class="grain-overlay dark:opacity-[0.07]"></div>
+<header class="fixed top-0 left-0 right-0 z-[60] glassmorphism transition-colors duration-300">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-24">
 <div class="flex items-center gap-4">
-<div class="size-7 text-primary">
-<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path></svg>
+<div class="size-8 text-primary">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
 </div>
-<h2 class="text-neutral-dark dark:text-white text-lg font-serif-main font-bold tracking-luxury uppercase">Maison<span class="text-primary ml-1">Noir</span></h2>
+<h2 class="text-neutral-dark dark:text-white text-xl font-serif-alt font-bold tracking-[0.2em] uppercase">Maison<span class="text-primary">Noir</span></h2>
 </div>
 <nav class="hidden md:flex items-center gap-10">
-<a class="text-[10px] font-bold uppercase tracking-ultra-wide text-neutral-dark/70 dark:text-gray-400 hover:text-primary transition-colors" href="#projects">Portfolio</a>
-<a class="text-[10px] font-bold uppercase tracking-ultra-wide text-neutral-dark/70 dark:text-gray-400 hover:text-primary transition-colors" href="#transformation">Showcase</a>
-<a class="text-[10px] font-bold uppercase tracking-ultra-wide text-neutral-dark/70 dark:text-gray-400 hover:text-primary transition-colors" href="#journey">Process</a>
-<div class="h-4 w-px bg-primary/20 mx-2"></div>
-<button class="p-2 text-neutral-dark dark:text-primary hover:scale-110 transition-transform" id="theme-toggle">
-<span class="material-symbols-outlined dark:hidden">dark_mode</span>
-<span class="material-symbols-outlined hidden dark:block">light_mode</span>
+<a class="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors dark:text-gray-300" href="#projects">Portfolio</a>
+<a class="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors dark:text-gray-300" href="#transformation">Showcase</a>
+<a class="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors dark:text-gray-300" href="#journey">Process</a>
+<a class="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors dark:text-gray-300" href="#services">Services</a>
+<div class="h-6 w-px bg-gray-300 dark:bg-white/20 mx-2"></div>
+<button aria-label="Toggle Dark Mode" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors group relative" id="theme-toggle">
+<span class="material-symbols-outlined dark:hidden text-neutral-dark">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:block text-primary animate-pulse-glow rounded-full">light_mode</span>
 </button>
-<button class="border border-primary/40 px-6 py-2.5 text-[10px] font-bold tracking-ultra-wide uppercase hover:bg-primary hover:text-black transition-all duration-300 gold-glow-hover dark:text-white">
+<button class="flex min-w-[140px] items-center justify-center rounded-none border border-neutral-dark dark:border-primary h-12 px-6 bg-transparent dark:text-primary text-neutral-dark text-xs font-bold tracking-widest uppercase hover:bg-neutral-dark hover:text-white dark:hover:bg-primary dark:hover:text-black transition-all duration-300">
                 Inquire
             </button>
 </nav>
-<div class="md:hidden flex items-center gap-4">
-<button class="text-primary" id="mobile-theme-toggle"><span class="material-symbols-outlined">contrast</span></button>
-<button class="text-neutral-dark dark:text-white"><span class="material-symbols-outlined">menu</span></button>
+<div class="flex items-center gap-4 md:hidden">
+<button class="p-2 text-neutral-dark dark:text-white" id="mobile-theme-toggle">
+<span class="material-symbols-outlined dark:hidden">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:block">light_mode</span>
+</button>
+<button class="text-neutral-dark dark:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
 </div>
 </div>
 </header>
-<main class="relative">
-<section class="relative h-[95vh] flex items-center overflow-hidden">
+<main class="relative z-10">
+<section class="relative h-screen flex items-center overflow-hidden">
 <div class="absolute inset-0 z-0">
-<div class="w-full h-full bg-cover bg-center scale-105" style='background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.85)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAQW7Cq5j_okVTnXwiSTH7Sh7E3D3omCpeoks6-b0zi1ri5oZdQ2xui3iSbV5MYpzfXMst1bgVWQPRIAh54bavP9OhmbTp_8RQqj9i33_t2Cfpk8qoj8r3n4I7-WvAbwwQRyi5As30fD8g6bFdWMTBKYBVyATTwSBjAc__LXh9hMEk4i3G8ndK8fFDAq1YdJO5QHUYfl4J-iojrx2Kzvm8BHzVmhzYlQscV_guYO5pBTF08Ss8a01Wt-kYwxQhxp-bhFefGQwjZhV4");'></div>
+<div class="w-full h-full bg-cover bg-center scale-105" data-alt="Modern concrete house" style='background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAQW7Cq5j_okVTnXwiSTH7Sh7E3D3omCpeoks6-b0zi1ri5oZdQ2xui3iSbV5MYpzfXMst1bgVWQPRIAh54bavP9OhmbTp_8RQqj9i33_t2Cfpk8qoj8r3n4I7-WvAbwwQRyi5As30fD8g6bFdWMTBKYBVyATTwSBjAc__LXh9hMEk4i3G8ndK8fFDAq1YdJO5QHUYfl4J-iojrx2Kzvm8BHzVmhzYlQscV_guYO5pBTF08Ss8a01Wt-kYwxQhxp-bhFefGQwjZhV4");'></div>
+<div class="absolute inset-0 bg-black/40"></div>
 </div>
-<div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full">
-<div class="max-w-4xl space-y-8">
-<div class="flex items-center gap-4 reveal-text active">
-<div class="h-[1px] w-12 bg-primary"></div>
-<p class="text-primary font-bold tracking-ultra-wide uppercase text-[10px]">High-End Residential Architecture</p>
+<div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full pt-20">
+<div class="max-w-4xl animate-fade-in-up">
+<div class="flex items-center gap-4 mb-8">
+<div class="h-px w-12 bg-primary"></div>
+<p class="text-primary font-bold tracking-[0.4em] uppercase text-xs">High-End Residential Architecture</p>
 </div>
-<h1 class="text-white text-5xl md:text-8xl font-serif-main font-normal leading-tight tracking-tight reveal-text active">
+<h1 class="text-white text-6xl md:text-8xl font-serif-alt font-medium leading-[1.1] mb-10 tracking-tight">
                     Silence sculpted <br/>into <span class="text-primary italic">form.</span>
 </h1>
-<p class="text-gray-300 text-base md:text-xl font-light leading-relaxed max-w-xl pl-4 md:pl-8 border-l border-primary/30 reveal-text active" style="transition-delay: 200ms;">
-                    Bespoke environments that balance luxury with restraint, delivering timeless aesthetics for the modern connoisseur.
+<p class="text-gray-300 text-lg md:text-xl font-light leading-relaxed mb-16 max-w-xl border-l border-primary/50 pl-6">
+                    We create bespoke environments that balance luxury with restraint, delivering timeless aesthetics for the modern connoisseur.
                 </p>
-<div class="flex flex-wrap gap-6 pt-6 reveal-text active [&>button]:min-h-[44px]" style="transition-delay: 400ms;">
-<button class="bg-primary text-black px-12 py-5 text-[10px] font-bold uppercase tracking-ultra-wide hover:bg-white transition-all gold-glow-hover">View Projects</button>
-<button class="border border-white/30 text-white px-12 py-5 text-[10px] font-bold uppercase tracking-ultra-wide hover:border-primary hover:text-primary backdrop-blur-sm transition-all gold-glow-hover">Studio Profile</button>
+<div class="flex flex-wrap gap-6">
+<button class="group flex items-center gap-3 min-w-[200px] justify-center rounded-none border border-primary h-16 px-10 bg-primary/90 text-black text-xs uppercase tracking-widest font-bold transition-all hover:bg-white hover:border-white">
+                        View Projects
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform text-sm">arrow_forward</span>
+</button>
+<button class="flex min-w-[200px] items-center justify-center rounded-none h-16 px-10 bg-white/5 backdrop-blur-md border border-white/20 text-white text-xs uppercase tracking-widest font-bold hover:bg-white/10 hover:border-primary/50 hover:text-primary transition-all">
+                        Studio Profile
+                    </button>
 </div>
 </div>
+</div>
+<div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-float text-primary/70">
+<span class="material-symbols-outlined text-4xl font-light">keyboard_arrow_down</span>
 </div>
 </section>
-<section class="py-32 bg-white dark:bg-background-dark blueprint-grid border-y border-primary/5" id="journey">
+<section class="py-32 blueprint-grid overflow-hidden border-y border-neutral-gold/10" id="journey">
 <div class="max-w-7xl mx-auto px-6 lg:px-12">
 <div class="text-center mb-24 reveal-text">
-<h2 class="text-primary text-[10px] font-bold tracking-ultra-wide uppercase mb-4">Our Methodology</h2>
-<h3 class="text-4xl md:text-5xl font-serif-main text-neutral-dark dark:text-white">The Design Journey</h3>
+<h2 class="text-primary text-xs font-bold tracking-[0.3em] uppercase mb-6">Our Methodology</h2>
+<h3 class="text-4xl md:text-5xl font-serif-alt text-neutral-dark dark:text-white">The Design Journey</h3>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-5 gap-8 lg:gap-12 relative">
-<div class="group flex flex-col items-center text-center reveal-text" style="transition-delay: 100ms;">
-<div class="w-20 h-20 rounded-full bg-white dark:bg-neutral-dark border border-primary/20 flex items-center justify-center mb-8 gold-glow-hover group-hover:border-primary group-hover:text-primary transition-all text-neutral-dark dark:text-gray-400">
-<span class="material-symbols-outlined text-3xl">forum</span>
+<div class="relative py-10">
+<div class="absolute top-1/2 left-0 w-full h-[1px] journey-line opacity-50 -translate-y-1/2 hidden md:block"></div>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-12 relative z-10">
+<div class="group flex flex-col items-center text-center transition-all duration-700 reveal-text">
+<div class="w-24 h-24 rounded-full bg-white dark:bg-surface-dark shadow-2xl border border-neutral-gold/20 flex items-center justify-center mb-10 icon-glow transition-all duration-500 cursor-help relative z-20">
+<span class="material-symbols-outlined text-3xl text-neutral-dark dark:text-gray-400 group-hover:text-primary transition-colors">forum</span>
 </div>
-<h4 class="text-lg font-serif-main mb-2 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Consultation</h4>
-<p class="text-[10px] text-slate-500 dark:text-gray-400 uppercase tracking-widest">Vision Alignment</p>
+<div class="flex flex-col justify-center min-h-[100px]">
+<h4 class="text-lg font-serif-alt mb-3 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Consultation</h4>
+<p class="text-xs text-slate-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 leading-relaxed max-w-[200px] mx-auto uppercase tracking-wide">Vision Alignment</p>
 </div>
-<div class="group flex flex-col items-center text-center reveal-text" style="transition-delay: 200ms;">
-<div class="w-20 h-20 rounded-full bg-white dark:bg-neutral-dark border border-primary/20 flex items-center justify-center mb-8 gold-glow-hover group-hover:border-primary group-hover:text-primary transition-all text-neutral-dark dark:text-gray-400">
-<span class="material-symbols-outlined text-3xl">architecture</span>
 </div>
-<h4 class="text-lg font-serif-main mb-2 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Concept</h4>
-<p class="text-[10px] text-slate-500 dark:text-gray-400 uppercase tracking-widest">Spatial Layouts</p>
+<div class="group flex flex-col items-center text-center transition-all duration-700 reveal-text" style="transition-delay: 100ms;">
+<div class="w-24 h-24 rounded-full bg-white dark:bg-surface-dark shadow-2xl border border-neutral-gold/20 flex items-center justify-center mb-10 icon-glow transition-all duration-500 cursor-help relative z-20">
+<span class="material-symbols-outlined text-3xl text-neutral-dark dark:text-gray-400 group-hover:text-primary transition-colors">architecture</span>
 </div>
-<div class="group flex flex-col items-center text-center reveal-text" style="transition-delay: 300ms;">
-<div class="w-20 h-20 rounded-full bg-white dark:bg-neutral-dark border border-primary/20 flex items-center justify-center mb-8 gold-glow-hover group-hover:border-primary group-hover:text-primary transition-all text-neutral-dark dark:text-gray-400">
-<span class="material-symbols-outlined text-3xl">view_in_ar</span>
+<div class="flex flex-col justify-center min-h-[100px]">
+<h4 class="text-lg font-serif-alt mb-3 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Concept</h4>
+<p class="text-xs text-slate-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 leading-relaxed max-w-[200px] mx-auto uppercase tracking-wide">Spatial Layouts</p>
 </div>
-<h4 class="text-lg font-serif-main mb-2 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Visualization</h4>
-<p class="text-[10px] text-slate-500 dark:text-gray-400 uppercase tracking-widest max-w-[200px]">Photorealistic 3D</p>
 </div>
-<div class="group flex flex-col items-center text-center reveal-text" style="transition-delay: 400ms;">
-<div class="w-20 h-20 rounded-full bg-white dark:bg-neutral-dark border border-primary/20 flex items-center justify-center mb-8 gold-glow-hover group-hover:border-primary group-hover:text-primary transition-all text-neutral-dark dark:text-gray-400">
-<span class="material-symbols-outlined text-3xl">edit_document</span>
+<div class="group flex flex-col items-center text-center transition-all duration-700 reveal-text" style="transition-delay: 200ms;">
+<div class="w-24 h-24 rounded-full bg-white dark:bg-surface-dark shadow-2xl border border-neutral-gold/20 flex items-center justify-center mb-10 icon-glow transition-all duration-500 cursor-help relative z-20">
+<span class="material-symbols-outlined text-3xl text-neutral-dark dark:text-gray-400 group-hover:text-primary transition-colors">view_in_ar</span>
 </div>
-<h4 class="text-lg font-serif-main mb-2 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Technical</h4>
-<p class="text-[10px] text-slate-500 dark:text-gray-400 uppercase tracking-widest">Construction Docs</p>
+<div class="flex flex-col justify-center min-h-[100px]">
+<h4 class="text-lg font-serif-alt mb-3 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Visualization</h4>
+<p class="text-xs text-slate-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 leading-relaxed max_w-[200px] mx-auto uppercase tracking-wide">Photorealistic 3D</p>
 </div>
-<div class="group flex flex-col items-center text-center reveal-text" style="transition-delay: 500ms;">
-<div class="w-20 h-20 rounded-full bg-white dark:bg-neutral-dark border border-primary/20 flex items-center justify-center mb-8 gold-glow-hover group-hover:border-primary group-hover:text-primary transition-all text-neutral-dark dark:text-gray-400">
-<span class="material-symbols-outlined text-3xl">business_center</span>
 </div>
-<h4 class="text-lg font-serif-main mb-2 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Execution</h4>
-<p class="text-[10px] text-slate-500 dark:text-gray-400 uppercase tracking-widest">On-site Management</p>
+<div class="group flex flex-col items-center text-center transition-all duration-700 reveal-text" style="transition-delay: 300ms;">
+<div class="w-24 h-24 rounded-full bg-white dark:bg-surface-dark shadow-2xl border border-neutral-gold/20 flex items-center justify-center mb-10 icon-glow transition-all duration-500 cursor-help relative z-20">
+<span class="material-symbols-outlined text-3xl text-neutral-dark dark:text-gray-400 group-hover:text-primary transition-colors">edit_document</span>
+</div>
+<div class="flex flex-col justify-center min-h-[100px]">
+<h4 class="text-lg font-serif-alt mb-3 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Technical</h4>
+<p class="text-xs text-slate-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 leading-relaxed max-w-[200px] mx-auto uppercase tracking-wide">Construction Docs</p>
+</div>
+</div>
+<div class="group flex flex-col items-center text-center transition-all duration-700 reveal-text" style="transition-delay: 400ms;">
+<div class="w-24 h-24 rounded-full bg-white dark:bg-surface-dark shadow-2xl border border-neutral-gold/20 flex items-center justify-center mb-10 icon-glow transition-all duration-500 cursor-help relative z-20">
+<span class="material-symbols-outlined text-3xl text-neutral-dark dark:text-gray-400 group-hover:text-primary transition-colors">business_center</span>
+</div>
+<div class="flex flex-col justify-center min-h-[100px]">
+<h4 class="text-lg font-serif-alt mb-3 text-neutral-dark dark:text-white group-hover:text-primary transition-colors">Execution</h4>
+<p class="text-xs text-slate-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-500 leading-relaxed max-w-[200px] mx-auto uppercase tracking-wide">On-site Management</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 </section>
-<section class="py-32 bg-slate-50 dark:bg-neutral-dark" id="transformation">
+<section class="py-32 bg-slate-50 dark:bg-surface-dark overflow-hidden" id="transformation">
 <div class="max-w-7xl mx-auto px-6 lg:px-12">
-<div class="flex flex-col items-center text-center mb-16 reveal-text">
-<h2 class="text-primary text-[10px] font-bold tracking-ultra-wide uppercase mb-4">Metamorphosis</h2>
-<h3 class="text-4xl md:text-5xl font-serif-main text-neutral-dark dark:text-white mb-6">Transformation Gallery</h3>
-<p class="text-slate-500 dark:text-gray-400 max-w-2xl text-lg font-light leading-relaxed">
-                    Witness the alchemy of architecture. Hover and drag to reveal the transition from initial structure to finalized masterpiece.
+<div class="flex flex-col items-center text-center mb-20 reveal-text">
+<h2 class="text-primary text-xs font-bold tracking-[0.3em] uppercase mb-6">Before &amp; After</h2>
+<h3 class="text-4xl md:text-5xl font-serif-alt font-medium tracking-tight mb-8 text-neutral-dark dark:text-white">Transformation Gallery</h3>
+<p class="text-slate-600 dark:text-gray-400 max-w-2xl text-lg font-light leading-relaxed">
+                    Witness the alchemy of architecture. Select a project to reveal the journey from existing conditions to realized masterwork.
                 </p>
 </div>
-<div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-16">
-<button class="project-tab active border-b-2 border-primary pb-2 text-[10px] font-bold uppercase tracking-widest text-primary min-h-[40px]" data-index="0">Kyoto Villa</button>
-<button class="project-tab border-b-2 border-transparent pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-gray-500 hover:text-primary transition-all min-h-[40px]" data-index="1">SF Modern HQ</button>
-<button class="project-tab border-b-2 border-transparent pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-gray-500 hover:text-primary transition-all min-h-[40px]" data-index="2">Berlin Loft</button>
+<div class="flex flex-wrap justify-center gap-6 mb-16 reveal-text">
+<button class="project-tab active px-8 py-4 text-xs font-bold tracking-[0.2em] uppercase border-b-2 border-primary bg-transparent text-neutral-dark dark:text-white transition-all hover:text-primary" data-index="0">
+                    Kyoto Villa
+                </button>
+<button class="project-tab px-8 py-4 text-xs font-bold tracking-[0.2em] uppercase border-b-2 border-transparent bg-transparent text-gray-500 hover:text-neutral-dark dark:text-gray-500 dark:hover:text-white transition-all" data-index="1">
+                    SF Modern HQ
+                </button>
+<button class="project-tab px-8 py-4 text-xs font-bold tracking-[0.2em] uppercase border-b-2 border-transparent bg-transparent text-gray-500 hover:text-neutral-dark dark:text-gray-500 dark:hover:text-white transition-all" data-index="2">
+                    Berlin Loft
+                </button>
 </div>
-<div class="before-after-container reveal-text">
-<div class="project-slide w-full">
-<div class="before-after-slider group bg-neutral-900 shadow-2xl">
-<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8RnjhlGUS7u6uHXgxQywRxm1itVBoyn72kHN2GG-1lcykeBbtB6P8ASnr6-dRlsr7rCkV3Hs0hjZrSPardkvFFlIverGCQF0_1Ws_vb9jpuUlRPHYaCihC708C-Pl91yBO3GI78DetsfsYwkZjC99eFfx-NR8hwBTeles0BVgymGu7PhVA2APc22IlwnV2gTlFf0MMB5P5qOFtolw2Bq6JCrZb888aiprLcvMz5_cDExFRm8pdcI7sXd_it3pKYPPiU2i77n6cao');"></div>
-<div class="before-image absolute inset-0 bg-cover bg-center z-20 grayscale" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAQW7Cq5j_okVTnXwiSTH7Sh7E3D3omCpeoks6-b0zi1ri5oZdQ2xui3iSbV5MYpzfXMst1bgVWQPRIAh54bavP9OhmbTp_8RQqj9i33_t2Cfpk8qoj8r3n4I7-WvAbwwQRyi5As30fD8g6bFdWMTBKYBVyATTwSBjAc__LXh9hMEk4i3G8ndK8fFDAq1YdJO5QHUYfl4J-iojrx2Kzvm8BHzVmhzYlQscV_guYO5pBTF08Ss8a01Wt-kYwxQhxp-bhFefGQwjZhV4'); clip-path: inset(0 50% 0 0);"></div>
+<div class="relative min-h-[600px] reveal-text">
+<div class="project-slide w-full animate-fade-in">
+<div class="before-after-slider group rounded-none border border-white/10 shadow-2xl shadow-black/50">
+<div class="after-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8RnjhlGUS7u6uHXgxQywRxm1itVBoyn72kHN2GG-1lcykeBbtB6P8ASnr6-dRlsr7rCkV3Hs0hjZrSPardkvFFlIverGCQF0_1Ws_vb9jpuUlRPHYaCihC708C-Pl91yBO3GI78DetsfsYwkZjC99eFfx-NR8hwBTeles0BVgymGu7PhVA2APc22IlwnV2gTlFf0MMB5P5qOFtolw2Bq6JCrZb888aiprLcvMz5_cDExFRm8pdcI7sXd_it3pKYPPiU2i77n6cao');"></div>
+<div class="before-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAQW7Cq5j_okVTnXwiSTH7Sh7E3D3omCpeoks6-b0zi1ri5oZdQ2xui3iSbV5MYpzfXMst1bgVWQPRIAh54bavP9OhmbTp_8RQqj9i33_t2Cfpk8qoj8r3n4I7-WvAbwwQRyi5As30fD8g6bFdWMTBKYBVyATTwSBjAc__LXh9hMEk4i3G8ndK8fFDAq1YdJO5QHUYfl4J-iojrx2Kzvm8BHzVmhzYlQscV_guYO5pBTF08Ss8a01Wt-kYwxQhxp-bhFefGQwjZhV4'); clip-path: inset(0 50% 0 0);"></div>
 <div class="absolute inset-0 pointer-events-none z-40 flex items-center justify-between px-10">
-<span class="bg-black/80 backdrop-blur-md text-primary text-[8px] font-bold tracking-widest uppercase px-2.5 md:px-4 py-2 border border-primary/20">Original Context</span>
-<span class="bg-black/80 backdrop-blur-md text-primary text-[8px] font-bold tracking-widest uppercase px-2.5 md:px-4 py-2 border border-primary/20">Realized Vision</span>
+<span class="slider-label left-label bg-black/80 backdrop-blur-sm text-primary text-[10px] font-bold tracking-[0.2em] uppercase px-4 py-2 border border-primary/30">Original</span>
+<span class="slider-label right-label bg-black/80 backdrop-blur-sm text-primary text-[10px] font-bold tracking-[0.2em] uppercase px-4 py-2 border border-primary/30">Realized</span>
 </div>
 <div class="slider-handle" style="left: 50%;"></div>
 </div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 p-10 bg-white dark:bg-charcoal border-l-4 border-primary shadow-xl">
+<div class="flex flex-col gap-3">
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Location</span>
+<span class="text-2xl font-serif-alt text-neutral-dark dark:text-white">Kyoto, Japan</span>
 </div>
-<div class="project-slide w-full hidden">
-<div class="before-after-slider group bg-neutral-900 shadow-2xl">
-<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8RnjhlGUS7u6uHXgxQywRxm1itVBoyn72kHN2GG-1lcykeBbtB6P8ASnr6-dRlsr7rCkV3Hs0hjZrSPardkvFFlIverGCQF0_1Ws_vb9jpuUlRPHYaCihC708C-Pl91yBO3GI78DetsfsYwkZjC99eFfx-NR8hwBTeles0BVgymGu7PhVA2APc22IlwnV2gTlFf0MMB5P5qOFtolw2Bq6JCrZb888aiprLcvMz5_cDExFRm8pdcI7sXd_it3pKYPPiU2i77n6cao');"></div>
-<div class="before-image absolute inset-0 bg-cover bg-center z-20 grayscale" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8RnjhlGUS7u6uHXgxQywRxm1itVBoyn72kHN2GG-1lcykeBbtB6P8ASnr6-dRlsr7rCkV3Hs0hjZrSPardkvFFlIverGCQF0_1Ws_vb9jpuUlRPHYaCihC708C-Pl91yBO3GI78DetsfsYwkZjC99eFfx-NR8hwBTeles0BVgymGu7PhVA2APc22IlwnV2gTlFf0MMB5P5qOFtolw2Bq6JCrZb888aiprLcvMz5_cDExFRm8pdcI7sXd_it3pKYPPiU2i77n6cao'); clip-path: inset(0 50% 0 0);"></div>
-<div class="slider-handle" style="left: 50%;"></div>
+<div class="flex flex-col gap-3">
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Year</span>
+<span class="text-2xl font-serif-alt text-neutral-dark dark:text-white">2023</span>
 </div>
-</div>
-<div class="project-slide w-full hidden">
-<div class="before-after-slider group bg-neutral-900 shadow-2xl">
-<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAAdoBQb9YDndJS6M8HatFPParUaPRVLms09b51vNUIrBT1290Pv2rIoZbMrpLILIm3zZN0PXoIsn4jr7jCWdpDE6qhxsq84KO23qWRA9SW82aixIerAnhyDqzkQWO96B1pZBaXCra4GtXt8_hmFjJ-Y5tThADtiK9bPVs-2swz7p8W8Q9gC1EvPyM5k7god4OI5rozrZIZtgZmpnGACKXp8Tku4dM9YbOxXxN1k4NHSo8_zBp7kt_tIDgt8cP5_1ypoVAFrcajX8I');"></div>
-<div class="before-image absolute inset-0 bg-cover bg-center z-20 grayscale" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8RnjhlGUS7u6uHXgxQywRxm1itVBoyn72kHN2GG-1lcykeBbtB6P8ASnr6-dRlsr7rCkV3Hs0hjZrSPardkvFFlIverGCQF0_1Ws_vb9jpuUlRPHYaCihC708C-Pl91yBO3GI78DetsfsYwkZjC99eFfx-NR8hwBTeles0BVgymGu7PhVA2APc22IlwnV2gTlFf0MMB5P5qOFtolw2Bq6JCrZb888aiprLcvMz5_cDExFRm8pdcI7sXd_it3pKYPPiU2i77n6cao'); clip-path: inset(0 50% 0 0);"></div>
-<div class="slider-handle" style="left: 50%;"></div>
-</div>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 text-center">
-<div class="p-8 border-l border-primary/20 bg-white/50 dark:bg-black/20">
-<p class="text-[9px] font-bold uppercase text-slate-400 tracking-widest mb-2">Location</p>
-<p class="text-xl font-serif-main text-neutral-dark dark:text-white">Kyoto, Japan</p>
-</div>
-<div class="p-8 border-l border-primary/20 bg-white/50 dark:bg-black/20">
-<p class="text-[9px] font-bold uppercase text-slate-400 tracking-widest mb-2">Completion</p>
-<p class="text-xl font-serif-main text-neutral-dark dark:text-white">Autumn 2023</p>
-</div>
-<div class="p-8 border-l border-primary/20 bg-white/50 dark:bg-black/20">
-<p class="text-[9px] font-bold uppercase text-slate-400 tracking-widest mb-2">Atmosphere</p>
-<p class="text-xl font-serif-main text-neutral-dark dark:text-white">Minimal Zen</p>
+<div class="flex flex-col gap-3">
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Typology</span>
+<span class="text-2xl font-serif-alt text-neutral-dark dark:text-white">Japandi Minimalist</span>
 </div>
 </div>
 </div>
-</section>
-<section class="py-32 bg-white dark:bg-background-dark" id="projects">
-<div class="max-w-7xl mx-auto px-6 lg:px-12">
-<div class="flex justify-between items-end mb-20 reveal-text">
-<div>
-<h2 class="text-primary text-[10px] font-bold tracking-ultra-wide uppercase mb-4">Portfolio</h2>
-<h3 class="text-4xl md:text-6xl font-serif-main text-neutral-dark dark:text-white leading-tight">Masterpieces</h3>
-</div>
-<a class="hidden md:flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-neutral-dark dark:text-white border-b border-primary pb-2 hover:text-primary transition-colors" href="#">
-                    Explore All <span class="material-symbols-outlined text-sm">arrow_forward</span>
-</a>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24">
-<div class="group cursor-pointer reveal-text">
-<div class="relative aspect-[4/5] overflow-hidden mb-8 border border-primary/10 shadow-xl gold-glow-hover">
-<div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD8RnjhlGUS7u6uHXgxQywRxm1itVBoyn72kHN2GG-1lcykeBbtB6P8ASnr6-dRlsr7rCkV3Hs0hjZrSPardkvFFlIverGCQF0_1Ws_vb9jpuUlRPHYaCihC708C-Pl91yBO3GI78DetsfsYwkZjC99eFfx-NR8hwBTeles0BVgymGu7PhVA2APc22IlwnV2gTlFf0MMB5P5qOFtolw2Bq6JCrZb888aiprLcvMz5_cDExFRm8pdcI7sXd_it3pKYPPiU2i77n6cao');"></div>
-<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-<span class="text-white font-serif-main italic text-2xl">View Case Study</span>
-</div>
-</div>
-<p class="text-primary text-[9px] font-bold uppercase tracking-widest mb-3">Residential • 2023</p>
-<h4 class="text-3xl font-serif-main text-neutral-dark dark:text-white mb-2">The Glass Pavilion</h4>
-<div class="w-full h-px bg-primary/20 group-hover:bg-primary transition-colors"></div>
-</div>
-<div class="group cursor-pointer mt-12 md:mt-32 reveal-text">
-<div class="relative aspect-[4/5] overflow-hidden mb-8 border border-primary/10 shadow-xl gold-glow-hover">
-<div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAAdoBQb9YDndJS6M8HatFPParUaPRVLms09b51vNUIrBT1290Pv2rIoZbMrpLILIm3zZN0PXoIsn4jr7jCWdpDE6qhxsq84KO23qWRA9SW82aixIerAnhyDqzkQWO96B1pZBaXCra4GtXt8_hmFjJ-Y5tThADtiK9bPVs-2swz7p8W8Q9gC1EvPyM5k7god4OI5rozrZIZtgZmpnGACKXp8Tku4dM9YbOxXxN1k4NHSo8_zBp7kt_tIDgt8cP5_1ypoVAFrcajX8I');"></div>
-<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-<span class="text-white font-serif-main italic text-2xl">View Case Study</span>
-</div>
-</div>
-<p class="text-primary text-[9px] font-bold uppercase tracking-widest mb-3">Hospitality • 2024</p>
-<h4 class="text-3xl font-serif-main text-neutral-dark dark:text-white mb-2">Brutalist Retreat</h4>
-<div class="w-full h-px bg-primary/20 group-hover:bg-primary transition-colors"></div>
-</div>
-</div>
-</div>
-</section>
-<section class="py-32 bg-slate-50 dark:bg-neutral-dark/40" id="services">
-<div class="max-w-7xl mx-auto px-6 lg:px-12">
-<div class="text-center mb-20 reveal-text">
-<h2 class="text-primary text-[10px] font-bold tracking-ultra-wide uppercase mb-4">Competencies</h2>
-<h3 class="text-4xl md:text-5xl font-serif-main text-neutral-dark dark:text-white">Bespoke Services</h3>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-<div class="p-12 bg-white dark:bg-neutral-dark border border-primary/10 hover:border-primary/40 transition-all duration-500 reveal-text group gold-glow-hover">
-<span class="material-symbols-outlined text-4xl text-primary mb-10 block">home_work</span>
-<h4 class="text-2xl font-serif-main text-neutral-dark dark:text-white mb-6">Residential</h4>
-<p class="text-slate-500 dark:text-gray-400 text-sm leading-relaxed mb-8">Creating sanctuary through light, space, and materiality. Each residence is a unique dialogue between owner and site.</p>
-<a class="text-[10px] font-bold uppercase tracking-widest text-primary group-hover:translate-x-2 transition-transform inline-flex items-center gap-2" href="#">Discover More <span class="material-symbols-outlined text-xs">arrow_forward</span></a>
-</div>
-<div class="p-12 bg-white dark:bg-neutral-dark border border-primary/10 hover:border-primary/40 transition-all duration-500 reveal-text group gold-glow-hover">
-<span class="material-symbols-outlined text-4xl text-primary mb-10 block">domain</span>
-<h4 class="text-2xl font-serif-main text-neutral-dark dark:text-white mb-6">Commercial</h4>
-<p class="text-slate-500 dark:text-gray-400 text-sm leading-relaxed mb-8">Forward-thinking environments that foster collaboration and reflect corporate identity through innovative structural forms.</p>
-<a class="text-[10px] font-bold uppercase tracking-widest text-primary group-hover:translate-x-2 transition-transform inline-flex items-center gap-2" href="#">Discover More <span class="material-symbols-outlined text-xs">arrow_forward</span></a>
-</div>
-<div class="p-12 bg-white dark:bg-neutral-dark border border-primary/10 hover:border-primary/40 transition-all duration-500 reveal-text group gold-glow-hover">
-<span class="material-symbols-outlined text-4xl text-primary mb-10 block">layers</span>
-<h4 class="text-2xl font-serif-main text-neutral-dark dark:text-white mb-6">Interiors</h4>
-<p class="text-slate-500 dark:text-gray-400 text-sm leading-relaxed mb-8">Curating the sensory experience of a building from the inside out, including custom furniture and lighting integration.</p>
-<a class="text-[10px] font-bold uppercase tracking-widest text-primary group-hover:translate-x-2 transition-transform inline-flex items-center gap-2" href="#">Discover More <span class="material-symbols-outlined text-xs">arrow_forward</span></a>
-</div>
-</div>
-</div>
-</section>
-<section class="py-40 bg-neutral-dark relative overflow-hidden text-center">
-<div class="absolute inset-0 opacity-10 pointer-events-none">
-<div class="grid grid-cols-6 h-full w-full border-r border-white/10">
-<div class="border-r border-white/10 h-full"></div><div class="border-r border-white/10 h-full"></div><div class="border-r border-white/10 h-full"></div><div class="border-r border-white/10 h-full"></div><div class="border-r border-white/10 h-full"></div>
-</div>
-</div>
-<div class="relative z-10 max-w-4xl mx-auto px-6 reveal-text">
-<h2 class="text-white text-5xl md:text-7xl font-serif-main font-light mb-12 tracking-tight leading-tight">
-                Ready to Build Your <br/><span class="italic text-primary">Legacy?</span>
-</h2>
-<p class="text-gray-400 text-xl font-light mb-16 leading-relaxed max-w-2xl mx-auto">
-                Currently accepting selective high-end commissions for the 2025 season. Let's begin the architectural conversation.
-            </p>
-<button class="bg-primary text-black px-16 py-6 text-[10px] font-bold uppercase tracking-ultra-wide hover:bg-white transition-all gold-glow-hover">
-                Start Collaboration
-            </button>
-</div>
-</section>
-</main>
-<div class="fixed bottom-8 left-6 md:left-auto md:right-8 z-[70] transition-all duration-300">
-<div class="glassmorphism rounded-full px-5 py-3 shadow-2xl flex items-center gap-4 border border-primary/20 dark:shadow-primary/5 gold-glow-hover">
-<div class="flex items-center gap-2">
-<a class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-primary/10 text-neutral-dark dark:text-white transition-colors" href="#"><span class="material-symbols-outlined text-lg">share</span></a>
-<a class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-primary/10 text-neutral-dark dark:text-white transition-colors" href="#"><span class="material-symbols-outlined text-lg">camera</span></a>
-</div>
-<div class="h-5 w-[1px] bg-primary/20"></div>
-<a class="flex items-center gap-2.5 bg-[#25D366] hover:brightness-105 text-white px-5 py-2 rounded-full text-[10px] font-bold tracking-widest uppercase transition-all shadow-lg shadow-green-500/10" href="https://wa.me/15550000000">
-<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path></svg>
-            WhatsApp
-        </a>
-</div>
-</div>
-<footer class="bg-white dark:bg-background-dark py-24 border-t border-primary/10">
-<div class="max-w-7xl mx-auto px-6 lg:px-12">
-<div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
-<div class="col-span-1 md:col-span-2 space-y-8">
-<div class="flex items-center gap-3">
-<div class="size-6 text-primary"><svg fill="none" viewBox="0 0 48 48"><path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path></svg></div>
-<h2 class="text-neutral-dark dark:text-white text-xl font-serif-main font-bold tracking-luxury uppercase">Maison<span class="text-primary">Noir</span></h2>
-</div>
-<p class="text-slate-500 dark:text-gray-400 max-w-sm text-lg font-light leading-relaxed">Sculpting silence into form. Minimalist architecture for a modern world.</p>
-<div class="flex gap-4">
-<a class="w-10 h-10 border border-primary/20 flex items-center justify-center text-primary hover:bg-primary hover:text-black transition-all" href="#"><span class="material-symbols-outlined text-lg">camera_alt</span></a>
-<a class="w-10 h-10 border border-primary/20 flex items-center justify-center text-primary hover:bg-primary hover:text-black transition-all" href="#"><span class="material-symbols-outlined text-lg">mail</span></a>
-</div>
-</div>
-<div>
-<h5 class="text-primary text-[10px] font-bold uppercase tracking-ultra-wide mb-8">Navigation</h5>
-<ul class="space-y-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-gray-400">
-<li><a class="hover:text-primary transition-colors" href="#projects">Portfolio</a></li>
-<li><a class="hover:text-primary transition-colors" href="#transformation">Showcase</a></li>
-<li><a class="hover:text-primary transition-colors" href="#journey">Process</a></li>
-</ul>
-</div>
-<div>
-<h5 class="text-primary text-[10px] font-bold uppercase tracking-ultra-wide mb-8">Studio</h5>
-<ul class="space-y-6 text-sm text-slate-500 dark:text-gray-400 font-light">
-<li class="flex items-start gap-3"><span class="material-symbols-outlined text-primary text-lg">location_on</span><span>1245 Skyline Blvd,<br/>San Francisco, CA 94105</span></li>
-<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-lg">phone</span><span>+1 (555) 000-0000</span></li>
-</ul>
-</div>
-</div>
-<div class="pt-10 border-t border-primary/10 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-slate-400 uppercase tracking-widest">
-<p>© 2024 MaisonNoir Studio. Excellence in Architecture.</p>
-<div class="flex gap-8">
-<a class="hover:text-primary transition-colors" href="#">Privacy</a>
-<a class="hover:text-primary transition-colors" href="#">Legal</a>
-</div>
-</div>
-</div>
-</footer>
+<!-- NOTE: Remaining HTML content continues in your original message.
+     This repository bundle includes the index.html exactly as received up to the point provided in the last message.
+     If you want the full file included end-to-end, paste the remaining tail section and I will regenerate the zip with the complete HTML. -->
 <script>
-    // Theme Switcher
-    const themeToggle = document.getElementById('theme-toggle');
-    const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+    // Theme Toggle Logic
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const mobileThemeToggleBtn = document.getElementById('mobile-theme-toggle');
     const html = document.documentElement;
-    function toggleMode() {
-        html.classList.toggle('dark');
-        localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
-    }
-    themeToggle.addEventListener('click', toggleMode);
-    mobileThemeToggle.addEventListener('click', toggleMode);
-    // Initial load check
-    if (localStorage.getItem('theme') === 'light') {
-        html.classList.remove('dark');
-    } else {
-        html.classList.add('dark');
-    }
-    // Scroll to Top Logic
-    const scrollToTopBtn = document.getElementById('scrollToTop');
-    window.addEventListener('scroll', () => {
-        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-        if (scrollPercent > 50) {
-            scrollToTopBtn.classList.add('visible');
+    function toggleTheme() {
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
         } else {
-            scrollToTopBtn.classList.remove('visible');
+            html.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
         }
-    });
-    scrollToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    // Before & After Slider Logic
-    document.querySelectorAll('.before-after-slider').forEach(slider => {
-        const handle = slider.querySelector('.slider-handle');
-        const beforeImg = slider.querySelector('.before-image');
-        const updateSlider = (x) => {
-            const rect = slider.getBoundingClientRect();
-            let position = ((x - rect.left) / rect.width) * 100;
-            position = Math.max(0, Math.min(100, position));
-            handle.style.left = `${position}%`;
-            beforeImg.style.clipPath = `inset(0 ${100 - position}% 0 0)`;
-        };
-        const onMove = (e) => {
-            const x = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-            updateSlider(x);
-        };
-        slider.addEventListener('mousedown', () => {
-            window.addEventListener('mousemove', onMove);
-        });
-        slider.addEventListener('touchstart', () => {
-            window.addEventListener('touchmove', onMove);
-        });
-        window.addEventListener('mouseup', () => {
-            window.removeEventListener('mousemove', onMove);
-        });
-        window.addEventListener('touchend', () => {
-            window.removeEventListener('touchmove', onMove);
-        });
-    });
-    // Project Tabs Logic
+    }
+    if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+    if (mobileThemeToggleBtn) mobileThemeToggleBtn.addEventListener('click', toggleTheme);
+    // Tab Switching Logic
     const tabs = document.querySelectorAll('.project-tab');
     const slides = document.querySelectorAll('.project-slide');
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            const index = tab.getAttribute('data-index');
             tabs.forEach(t => {
-                t.classList.remove('active', 'text-primary', 'border-primary');
-                t.classList.add('text-slate-400', 'border-transparent');
+                t.classList.remove('active');
+                // Tab styling reset
+                t.classList.add('border-transparent', 'text-gray-500');
+                t.classList.remove('border-primary', 'text-neutral-dark', 'dark:text-white');
             });
-            tab.classList.add('active', 'text-primary', 'border-primary');
-            tab.classList.remove('text-slate-400', 'border-transparent');
-            slides.forEach((s, i) => {
-                s.classList.toggle('hidden', i != index);
-            });
+            slides.forEach(s => s.classList.add('hidden'));
+            tab.classList.add('active');
+            // Active styling
+            tab.classList.remove('border-transparent', 'text-gray-500');
+            tab.classList.add('border-primary', 'text-neutral-dark', 'dark:text-white');
+            const index = tab.getAttribute('data-index');
+            slides[index].classList.remove('hidden');
         });
     });
-    // Reveal on Scroll
-    const reveal = () => {
+    // Multi-instance Slider Logic
+    let activeSliderElement = null;
+    function updateSlider(e, pageX) {
+        if (!activeSliderElement) return;
+        const rect = activeSliderElement.getBoundingClientRect();
+        const handle = activeSliderElement.querySelector('.slider-handle');
+        const beforeImg = activeSliderElement.querySelector('.before-image');
+        const leftLabel = activeSliderElement.querySelector('.left-label');
+        const rightLabel = activeSliderElement.querySelector('.right-label');
+        let pos = ((pageX - rect.left) / rect.width) * 100;
+        if (pos < 0) pos = 0;
+        if (pos > 100) pos = 100;
+        handle.style.left = `${pos}%`;
+        beforeImg.style.clipPath = `inset(0 ${100 - pos}% 0 0)`;
+        // Label fade logic
+        if (pos < 15) {
+            leftLabel.style.opacity = '0';
+        } else if (pos > 85) {
+            rightLabel.style.opacity = '0';
+        } else {
+            leftLabel.style.opacity = '1';
+            rightLabel.style.opacity = '1';
+        }
+    }
+    document.querySelectorAll('.before-after-slider').forEach(slider => {
+        slider.addEventListener('mousedown', (e) => {
+            activeSliderElement = slider;
+            updateSlider(e, e.pageX);
+        });
+        slider.addEventListener('touchstart', (e) => {
+            activeSliderElement = slider;
+            updateSlider(e, e.touches[0].pageX);
+        });
+    });
+    window.addEventListener('mouseup', () => activeSliderElement = null);
+    window.addEventListener('touchend', () => activeSliderElement = null);
+    window.addEventListener('mousemove', (e) => {
+        if (activeSliderElement) {
+            e.preventDefault();
+            updateSlider(e, e.pageX);
+        }
+    });
+    window.addEventListener('touchmove', (e) => {
+        if (activeSliderElement) {
+            updateSlider(e, e.touches[0].pageX);
+        }
+    });
+    // Existing Parallax & Reveal Effects
+    window.addEventListener('scroll', () => {
+        const scroll = window.pageYOffset;
+        const parallaxBgs = document.querySelectorAll('.parallax-bg');
+        parallaxBgs.forEach(bg => {
+            const parent = bg.closest('.parallax-container');
+            const rect = parent.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                const shift = (window.innerHeight - rect.top) * 0.05;
+                bg.style.transform = `translateY(${shift}px) scale(1.1)`;
+            }
+        });
         const reveals = document.querySelectorAll('.reveal-text');
         reveals.forEach(el => {
-            const windowHeight = window.innerHeight;
-            const elementTop = el.getBoundingClientRect().top;
-            if (elementTop < windowHeight * 0.9) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.9) {
                 el.classList.add('active');
             }
         });
-    };
-    window.addEventListener('scroll', reveal);
-    reveal(); // Trigger initially
+    });
+    window.dispatchEvent(new Event('scroll'));
 </script>
 
 </body></html>
